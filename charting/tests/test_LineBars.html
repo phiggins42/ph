@@ -1,0 +1,98 @@
+<DOCTYPE html>
+<html>
+    <head>
+        
+        <title>Testing ph/charting/LineBars</title>
+        <script src="../../../dojo/dojo.js"></script>
+        <script>
+            require([
+                "dojo",
+                "ph/charting/LineBars",
+                "dojox/charting/Chart2D",
+                "ph/charting/AwesomeTooltip",
+                "ph/charting/HeatDiff",
+                "dojo/domReady!"
+            ], function(dojo, LineBars, Chart, AwesomeTooltip, HeatDiff){
+                
+                
+                function setRandomData(c){
+                    var data = {
+                        "a": [],
+                        "b": []
+                    };
+
+                    while(data.a.length < 50){
+                        data.a.push((Math.random() * 10) + 1);
+                        data.b.push((Math.random() * 10) + 1)
+                    }                    
+
+                    c.addSeries("a", data.a, {
+                        plot: "theLines",
+                        stroke:{
+                            color:"red"
+                        }
+                    })
+
+                    c.addSeries("b", data.b, {
+                        plot: "theLines"
+                    })
+                    
+                    return c;
+
+                }
+                
+                
+                var c = new Chart("node");
+                c.addAxis("x").addAxis("y", { vertical: true, includeZero:true });
+                c.addPlot("theLines", {
+                    type: LineBars,
+                    gap: 4
+                })
+                
+                c.addPlot("labels", {
+                    type: AwesomeTooltip,
+                    formatter: function(idx){
+                        
+                    }
+                })
+                setRandomData(c).render();
+                
+                
+                setInterval(function(){
+                    
+        //            setRandomData(c).render();
+                    
+                }, 5000);
+                
+                
+                var d = new Chart("node2");
+                d.addAxis("x", { majorTickStep: 1, minorTickStep: 0, majorTicks: true }).addAxis("y", { vertical: true, includeZero:true });
+                d.addPlot("default", {
+                    type:"Lines",
+                    tension:"S",
+                    vAxis: "y", hAxis:"x"
+                })
+                
+                d.addPlot("diff", {
+                    type: HeatDiff,
+                    positive: "aa", 
+                    negative: "bb"
+                })
+                
+                d.addSeries("aa", [1,    1.2,    1.4, 1.6, 1.8, 1.5, 1,   0.75, 1.25, 1.5, 1.75, 1,    1.2,    1.4, 1.6, 1.8, 1.5, 1,   0.75, 1.25, 1.5, 1.75, 1,    1.2,    1.4, 1.6, 1.8, 1.5, 1,   0.75, 1.25, 1.5, 1.75, 1,    1.2,    1.4, 1.6, 1.8, 1.5, 1,   0.75, 1.25, 1.5, 1.75], { plot: "default" });
+                d.addSeries("bb", [0.5, 0.75,    1,   1.5, 1.9, 2.9, 1.8, 0.75, 0.25, 0.1, 1.25, 0.5, 0.75,    1,   1.5, 1.9, 2.9, 1.8, 0.75, 0.25, 0.1, 1.25, 0.5, 0.75,    1,   1.5, 1.9, 2.9, 1.8, 0.75, 0.25, 0.1, 1.25, 0.5, 0.75,    1,   1.5, 1.9, 2.9, 1.8, 0.75, 0.25, 0.1, 1.25], { plot: "default" });
+                
+                d.render();
+                
+            });
+        </script>
+    </head>
+    <body>
+        <h1>LineBars</h1>
+        
+        <div id="node2"></div>
+        <div id="node"></div>
+
+        
+    </body>
+</html>
